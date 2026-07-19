@@ -1,0 +1,79 @@
+name: Wrong policy decision
+description: Report a missed cost action, false positive, unexpected block, or incorrect approval detail.
+title: "[decision]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the policy. Use fake resource identifiers and remove credentials before submitting.
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: What went wrong?
+      options:
+        - A cost-bearing action was allowed
+        - A safe action required approval
+        - A safe action was blocked
+        - The approval details were incorrect
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Human CLI
+        - Generic JSON or CI
+        - Claude Code or Claude Desktop Code
+        - Codex
+        - Cursor
+        - GitHub Copilot CLI
+        - GitHub Copilot for VS Code
+        - GitHub Copilot cloud agent
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Agent Cost Guard version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: action
+    attributes:
+      label: Proposed action
+      description: Paste the smallest reproduction. Replace credentials, account IDs, hostnames, and customer data with fake values.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual decision
+      description: Include the decision, reason code, and redacted output.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected decision
+      description: Explain why the action should be allowed, require approval, or be blocked.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I used fake credentials and fake cloud identifiers, and removed private paths and customer data.
+          required: true

@@ -1,0 +1,68 @@
+[
+  {
+    "name": "tool-create-database",
+    "group": "tool",
+    "action": { "kind": "tool", "name": "provision_database_cluster", "arguments": { "size": "large" } },
+    "expect": { "decision": "approval-required", "reasonCode": "generic.tool.cost-bearing-name" }
+  },
+  {
+    "name": "tool-read-only",
+    "group": "tool",
+    "action": { "kind": "tool", "name": "get_weather", "arguments": { "city": "Pune" } },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "tool-bash-route-approval",
+    "group": "tool",
+    "action": { "kind": "tool", "name": "Bash", "arguments": { "command": "aws s3 mb s3://demo" } },
+    "expect": { "decision": "approval-required", "reasonCode": "aws.s3.mb" }
+  },
+  {
+    "name": "tool-bash-route-allow",
+    "group": "tool",
+    "action": { "kind": "tool", "name": "Bash", "arguments": { "command": "ls -la" } },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "tool-copilot-cmd-key",
+    "group": "tool",
+    "action": { "kind": "tool", "name": "bash", "arguments": { "cmd": "terraform apply" } },
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.apply" }
+  },
+  {
+    "name": "tool-write-tf-resource",
+    "group": "tool",
+    "action": {
+      "kind": "tool",
+      "name": "Write",
+      "arguments": { "file_path": "infra.tf", "content": "resource \"aws_s3_bucket\" \"b\" {\n  bucket = \"demo\"\n}" }
+    },
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.resource-added" }
+  },
+  {
+    "name": "tool-write-nontf",
+    "group": "tool",
+    "action": {
+      "kind": "tool",
+      "name": "Write",
+      "arguments": { "file_path": "app.js", "content": "const resource = createResource();" }
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "tool-multiedit-tf",
+    "group": "tool",
+    "action": {
+      "kind": "tool",
+      "name": "MultiEdit",
+      "arguments": {
+        "file_path": "main.tf",
+        "edits": [
+          { "old_string": "", "new_string": "# just a comment" },
+          { "old_string": "", "new_string": "resource \"aws_db_instance\" \"db\" {}" }
+        ]
+      }
+    },
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.resource-added" }
+  }
+]

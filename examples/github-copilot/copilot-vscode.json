@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "./node_modules/.bin/agent-cost-guard hook copilot --mode vscode --strict",
+        "powershell": ".\\node_modules\\.bin\\agent-cost-guard.cmd hook copilot --mode vscode --strict",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

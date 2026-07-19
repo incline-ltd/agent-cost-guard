@@ -1,0 +1,45 @@
+[
+  {
+    "name": "cp-interactive-allow",
+    "mode": "interactive",
+    "input": { "toolName": "bash", "toolArgs": { "command": "aws s3 ls" } },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "cp-interactive-ask",
+    "mode": "interactive",
+    "input": { "toolName": "bash", "toolArgs": { "command": "terraform apply" } },
+    "expect": { "permissionDecision": "ask", "reasonIncludes": "Cost confirmation required:", "exitCode": 0 }
+  },
+  {
+    "name": "cp-cloud-deny-on-approval",
+    "mode": "cloud",
+    "input": { "toolName": "bash", "toolArgs": { "command": "terraform apply" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "Cost confirmation required:", "exitCode": 0 }
+  },
+  {
+    "name": "cp-cloud-block-guard-bypass",
+    "mode": "cloud",
+    "input": { "toolName": "bash", "toolArgs": { "command": "AGENT_COST_GUARD=off make deploy" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "bypass", "exitCode": 0 }
+  },
+  {
+    "name": "cp-interactive-snakecase-input",
+    "mode": "interactive",
+    "input": { "tool_name": "bash", "tool_input": { "command": "wrangler deploy" } },
+    "expect": { "permissionDecision": "ask", "reasonIncludes": "Worker deployment", "exitCode": 0 }
+  },
+  {
+    "name": "cp-cloud-malformed-strict",
+    "mode": "cloud",
+    "rawInput": "{ not valid",
+    "strict": true,
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "strict mode", "exitCode": 0 }
+  },
+  {
+    "name": "cp-cloud-malformed-nonstrict",
+    "mode": "cloud",
+    "rawInput": "{ not valid",
+    "expect": { "empty": true, "exitCode": 0 }
+  }
+]

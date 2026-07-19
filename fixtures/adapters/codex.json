@@ -1,0 +1,61 @@
+[
+  {
+    "name": "codex-allow-read-only-shell",
+    "input": {
+      "hook_event_name": "PreToolUse",
+      "tool_name": "Bash",
+      "tool_input": { "command": "aws ec2 describe-instances" },
+      "tool_use_id": "fake-tool-use",
+      "turn_id": "fake-turn"
+    },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "codex-deny-cost-shell",
+    "input": { "tool_name": "Bash", "tool_input": { "command": "aws ec2 run-instances --instance-type t3.small" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "Cost confirmation required:", "exitCode": 0 }
+  },
+  {
+    "name": "codex-deny-guard-bypass",
+    "input": { "tool_name": "Bash", "tool_input": { "command": "export AGENT_COST_GUARD_DISABLED=true" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "bypass", "exitCode": 0 }
+  },
+  {
+    "name": "codex-allow-benign-apply-patch-command",
+    "input": {
+      "tool_name": "apply_patch",
+      "tool_input": { "command": "*** Begin Patch\n*** Update File: src/app.ts\n@@\n+export const ready = true;\n*** End Patch" }
+    },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "codex-deny-terraform-apply-patch-command",
+    "input": {
+      "tool_name": "apply_patch",
+      "tool_input": { "command": "*** Begin Patch\n*** Update File: infra/main.tf\n@@\n+resource \"aws_instance\" \"fake_web\" {}\n*** End Patch" }
+    },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "Terraform-managed provider", "exitCode": 0 }
+  },
+  {
+    "name": "codex-deny-cost-mcp-tool",
+    "input": { "tool_name": "mcp__cloud__create_database", "tool_input": { "name": "fake-db" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "structured tool call", "exitCode": 0 }
+  },
+  {
+    "name": "codex-deny-uninspectable-shell-strict",
+    "input": { "tool_name": "Bash", "tool_input": { "command": 42 } },
+    "strict": true,
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "completely inspected", "exitCode": 0 }
+  },
+  {
+    "name": "codex-malformed-strict",
+    "rawInput": "not json",
+    "strict": true,
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "strict mode", "exitCode": 0 }
+  },
+  {
+    "name": "codex-malformed-nonstrict",
+    "rawInput": "not json",
+    "expect": { "empty": true, "exitCode": 0 }
+  }
+]

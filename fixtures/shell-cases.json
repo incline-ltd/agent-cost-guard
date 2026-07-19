@@ -1,0 +1,338 @@
+[
+  {
+    "name": "aws-ec2-run-instances",
+    "group": "aws",
+    "command": "aws ec2 run-instances --image-id ami-0abc123 --instance-type t3.small",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.run-instances" }
+  },
+  {
+    "name": "aws-ec2-describe-instances",
+    "group": "aws",
+    "command": "aws ec2 describe-instances --filters Name=instance-state-name,Values=running",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-ec2-run-instances-help",
+    "group": "aws",
+    "command": "aws ec2 run-instances --help",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-echo-run-instances",
+    "group": "aws",
+    "command": "echo \"aws ec2 run-instances\"",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-ec2-create-snapshot",
+    "group": "aws",
+    "command": "aws ec2 create-snapshot --volume-id vol-0abc123 --description nightly",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.create-snapshot" }
+  },
+  {
+    "name": "aws-ec2-describe-snapshots",
+    "group": "aws",
+    "command": "aws ec2 describe-snapshots --owner-ids self",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-ec2-create-volume",
+    "group": "aws",
+    "command": "aws ec2 create-volume --availability-zone us-east-1a --size 100",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.create-volume" }
+  },
+  {
+    "name": "aws-rds-create-db-instance",
+    "group": "aws",
+    "command": "aws rds create-db-instance --db-instance-identifier prod --db-instance-class db.t3.micro --engine postgres",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.rds.create-db-instance" }
+  },
+  {
+    "name": "aws-rds-describe-db-instances",
+    "group": "aws",
+    "command": "aws rds describe-db-instances",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-rds-modify-db-instance-class",
+    "group": "aws",
+    "command": "aws rds modify-db-instance --db-instance-identifier prod --db-instance-class db.m5.large --apply-immediately",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.rds.modify-db-instance.capacity" }
+  },
+  {
+    "name": "aws-rds-modify-db-instance-tags",
+    "group": "aws",
+    "command": "aws rds modify-db-instance --db-instance-identifier prod --no-multi-az",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-s3-mb",
+    "group": "aws",
+    "command": "aws s3 mb s3://demo-bucket",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.s3.mb" }
+  },
+  {
+    "name": "aws-s3-ls",
+    "group": "aws",
+    "command": "aws s3 ls s3://demo-bucket",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-ec2-terminate-instances",
+    "group": "aws",
+    "command": "aws ec2 terminate-instances --instance-ids i-0abc123",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "aws-ec2-purchase-reserved",
+    "group": "aws",
+    "command": "aws ec2 purchase-reserved-instances-offering --reserved-instances-offering-id 0abc --instance-count 3",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.purchase-reserved-instances-offering" }
+  },
+  {
+    "name": "aws-lambda-provisioned-concurrency",
+    "group": "aws",
+    "command": "aws lambda put-provisioned-concurrency-config --function-name api --qualifier 1 --provisioned-concurrent-executions 50",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.lambda.put-provisioned-concurrency-config" }
+  },
+  {
+    "name": "terraform-apply",
+    "group": "terraform",
+    "command": "terraform apply saved.plan",
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.apply" }
+  },
+  {
+    "name": "terraform-apply-auto-approve",
+    "group": "terraform",
+    "command": "terraform apply -auto-approve",
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.apply" }
+  },
+  {
+    "name": "terraform-plan",
+    "group": "terraform",
+    "command": "terraform plan -out saved.plan",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-validate",
+    "group": "terraform",
+    "command": "terraform validate",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-destroy",
+    "group": "terraform",
+    "command": "terraform destroy -auto-approve",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "cloudflare-wrangler-deploy",
+    "group": "cloudflare",
+    "command": "wrangler deploy",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.wrangler.deploy" }
+  },
+  {
+    "name": "cloudflare-wrangler-publish",
+    "group": "cloudflare",
+    "command": "wrangler publish --env production",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.wrangler.deploy" }
+  },
+  {
+    "name": "cloudflare-wrangler-deploy-dry-run",
+    "group": "cloudflare",
+    "command": "wrangler deploy --dry-run --outdir dist",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "cloudflare-wrangler-dev",
+    "group": "cloudflare",
+    "command": "wrangler dev",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "cloudflare-d1-create",
+    "group": "cloudflare",
+    "command": "wrangler d1 create my-db",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.d1.create" }
+  },
+  {
+    "name": "cloudflare-d1-list",
+    "group": "cloudflare",
+    "command": "wrangler d1 list",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "cloudflare-kv-namespace-create",
+    "group": "cloudflare",
+    "command": "wrangler kv namespace create MY_KV",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.kv.namespace-create" }
+  },
+  {
+    "name": "cloudflare-kv-namespace-create-colon",
+    "group": "cloudflare",
+    "command": "wrangler kv:namespace create MY_KV",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.kv.namespace-create" }
+  },
+  {
+    "name": "cloudflare-r2-bucket-create",
+    "group": "cloudflare",
+    "command": "wrangler r2 bucket create my-bucket",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.r2.bucket-create" }
+  },
+  {
+    "name": "cloudflare-r2-bucket-list",
+    "group": "cloudflare",
+    "command": "wrangler r2 bucket list",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "cloudflare-tunnel-create",
+    "group": "cloudflare",
+    "command": "cloudflared tunnel create my-tunnel",
+    "expect": { "decision": "approval-required", "reasonCode": "cloudflare.tunnel.create" }
+  },
+  {
+    "name": "cloudflare-d1-delete",
+    "group": "cloudflare",
+    "command": "wrangler d1 delete my-db",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-purchase-credits",
+    "group": "generic",
+    "command": "openai credits purchase --amount 100",
+    "expect": { "decision": "approval-required", "reasonCode": "generic.purchase-credits" }
+  },
+  {
+    "name": "generic-git-add",
+    "group": "generic",
+    "command": "git add .",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-plan-upgrade",
+    "group": "generic",
+    "command": "billingctl plan upgrade --confirm",
+    "expect": { "decision": "approval-required", "reasonCode": "generic.plan-upgrade" }
+  },
+  {
+    "name": "generic-npm-upgrade",
+    "group": "generic",
+    "command": "npm upgrade",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-snapshot-create",
+    "group": "generic",
+    "command": "vmtool snapshot create nightly-image",
+    "expect": { "decision": "approval-required", "reasonCode": "generic.snapshot-create" }
+  },
+  {
+    "name": "generic-backup-create",
+    "group": "generic",
+    "command": "dbtool backup create --database prod",
+    "expect": { "decision": "approval-required", "reasonCode": "generic.backup-create" }
+  },
+  {
+    "name": "generic-backup-restore",
+    "group": "generic",
+    "command": "dbtool backup restore --database prod",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-kubectl-scale-up",
+    "group": "generic",
+    "command": "kubectl scale deployment web --replicas=4",
+    "expect": { "decision": "approval-required", "reasonCode": "generic.scale-up" }
+  },
+  {
+    "name": "generic-kubectl-scale-down",
+    "group": "generic",
+    "command": "kubectl scale deployment web --replicas=1",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-kubectl-get",
+    "group": "generic",
+    "command": "kubectl get pods -A",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "generic-guard-disable-env",
+    "group": "guard",
+    "command": "AGENT_COST_GUARD_DISABLED=1 terraform apply",
+    "expect": { "decision": "block", "reasonCode": "guard.bypass" }
+  },
+  {
+    "name": "generic-guard-disable-export",
+    "group": "guard",
+    "command": "export AGENT_COST_GUARD=off",
+    "expect": { "decision": "block", "reasonCode": "guard.bypass" }
+  },
+  {
+    "name": "generic-guard-unrelated-env",
+    "group": "guard",
+    "command": "MY_TOKEN=abc123 aws ec2 describe-instances",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "compound-mixed",
+    "group": "compound",
+    "command": "mkdir infra && cd infra && terraform apply",
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.apply" }
+  },
+  {
+    "name": "compound-pipe-allow",
+    "group": "compound",
+    "command": "aws ec2 describe-instances | jq '.Reservations'",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "compound-harmless-then-cost",
+    "group": "compound",
+    "command": "echo starting; aws s3 mb s3://demo-bucket",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.s3.mb" }
+  },
+  {
+    "name": "quoting-bucket-name",
+    "group": "quoting",
+    "command": "aws s3 mb 's3://my-demo-bucket'",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.s3.mb" }
+  },
+  {
+    "name": "env-prefix-region",
+    "group": "quoting",
+    "command": "AWS_REGION=us-east-1 aws ec2 run-instances --instance-type t3.nano",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.run-instances" }
+  },
+  {
+    "name": "sudo-wrapper",
+    "group": "quoting",
+    "command": "sudo aws ec2 run-instances --instance-type t3.small",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.run-instances" }
+  },
+  {
+    "name": "sh-c-wrapper",
+    "group": "quoting",
+    "command": "bash -c \"aws ec2 run-instances --instance-type t3.micro\"",
+    "expect": { "decision": "approval-required", "reasonCode": "aws.ec2.run-instances" }
+  },
+  {
+    "name": "empty-command",
+    "group": "malformed",
+    "command": "",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "whitespace-command",
+    "group": "malformed",
+    "command": "    \t  ",
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "comment-only-command",
+    "group": "malformed",
+    "command": "# aws ec2 run-instances --instance-type t3.large",
+    "expect": { "decision": "allow" }
+  }
+]

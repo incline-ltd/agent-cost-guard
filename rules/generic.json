@@ -1,0 +1,160 @@
+[
+  {
+    "id": "generic.cost-guard-bypass",
+    "version": "1",
+    "provider": "agent-cost-guard",
+    "category": "guard-bypass",
+    "actionForm": "shell",
+    "decision": "block",
+    "reasonCode": "guard.bypass",
+    "summary": "Blocked: this command attempts to disable, turn off, or bypass the active cost guard.",
+    "priority": 100,
+    "match": { "special": "cost-guard-bypass" },
+    "fixtures": ["generic-guard-disable-env", "generic-guard-disable-export", "generic-guard-unrelated-env"]
+  },
+  {
+    "id": "generic.purchase-credits",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "credit-purchase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.purchase-credits",
+    "summary": "Purchasing credits is a prepaid, cost-bearing action.",
+    "priority": 10,
+    "match": {
+      "positionalPair": [["purchase", "buy", "add", "topup", "top-up"], ["credit", "credits"]]
+    },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "prepaid credits",
+      "billing": "one-time",
+      "price": "unknown; the purchased amount and currency come from the command"
+    },
+    "fixtures": ["generic-purchase-credits", "generic-git-add"]
+  },
+  {
+    "id": "generic.plan-upgrade",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "plan-upgrade",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.plan-upgrade",
+    "summary": "Upgrading or enabling a paid plan or subscription is a cost-bearing action.",
+    "priority": 10,
+    "match": {
+      "positionalPair": [
+        ["upgrade", "enable", "subscribe", "activate", "purchase", "buy"],
+        ["plan", "subscription", "tier", "seat", "seats"]
+      ]
+    },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "paid plan or subscription",
+      "billing": "recurring",
+      "price": "unknown; the plan and its recurring price come from the command"
+    },
+    "fixtures": ["generic-plan-upgrade", "generic-npm-upgrade"]
+  },
+  {
+    "id": "generic.snapshot-create.pair",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "snapshot-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.snapshot-create",
+    "summary": "Creating a snapshot stores data that is usually billed.",
+    "priority": 10,
+    "match": {
+      "positionalPair": [["create", "new", "take"], ["snapshot", "snapshots"]]
+    },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "snapshot storage",
+      "billing": "usage-based",
+      "price": "unknown; snapshot storage is usually billed per GB-month"
+    },
+    "fixtures": ["generic-snapshot-create"]
+  },
+  {
+    "id": "generic.snapshot-create.token",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "snapshot-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.snapshot-create",
+    "summary": "Creating a snapshot stores data that is usually billed.",
+    "priority": 10,
+    "match": { "anyPositional": ["create-snapshot", "snapshot-create"] },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "snapshot storage",
+      "billing": "usage-based",
+      "price": "unknown; snapshot storage is usually billed per GB-month"
+    }
+  },
+  {
+    "id": "generic.backup-create.pair",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "backup-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.backup-create",
+    "summary": "Creating a paid backup stores data that is usually billed.",
+    "priority": 10,
+    "match": {
+      "positionalPair": [["create", "new", "take"], ["backup", "backups"]]
+    },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "backup storage",
+      "billing": "usage-based",
+      "price": "unknown; backup storage is usually billed per GB-month"
+    },
+    "fixtures": ["generic-backup-create", "generic-backup-restore"]
+  },
+  {
+    "id": "generic.scale-up",
+    "version": "1",
+    "provider": "unknown (generic)",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "generic.scale-up",
+    "summary": "Increasing replicas or capacity can raise cost.",
+    "priority": 10,
+    "match": { "special": "scale-up-flags" },
+    "approval": {
+      "provider": "unknown (confirm from the command)",
+      "resource": "replica or capacity increase",
+      "billing": "usage-based",
+      "price": "unknown; more replicas or capacity increases cost"
+    },
+    "fixtures": ["generic-kubectl-scale-up", "generic-kubectl-scale-down"]
+  },
+  {
+    "id": "generic.tool.cost-bearing-name",
+    "version": "1",
+    "provider": "unknown (structured tool)",
+    "category": "tool-cost",
+    "actionForm": "tool",
+    "decision": "approval-required",
+    "reasonCode": "generic.tool.cost-bearing-name",
+    "summary": "A structured tool call whose name suggests creating or scaling a paid resource.",
+    "priority": 10,
+    "match": {
+      "toolNameRegex": "(?=.*(?:create|provision|launch|deploy|scale|upgrade|purchase|subscribe|enable|run|start))(?=.*(?:instance|cluster|database|bucket|volume|snapshot|backup|subscription|credit|plan|nodepool|node_pool|cache|dyno))"
+    },
+    "approval": {
+      "provider": "unknown (confirm the provider)",
+      "resource": "resource created or scaled by a structured tool call",
+      "billing": "unknown",
+      "price": "unknown; the tool name suggests a cost-bearing action, so confirm the provider and resource"
+    },
+    "fixtures": ["tool-create-database", "tool-read-only"]
+  }
+]

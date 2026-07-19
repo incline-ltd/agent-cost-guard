@@ -1,0 +1,134 @@
+[
+  {
+    "id": "cloudflare.wrangler.deploy",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "compute-deploy",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.wrangler.deploy",
+    "summary": "Deploys a Cloudflare Worker, which can incur request and compute charges.",
+    "priority": 50,
+    "match": { "bin": ["wrangler"], "pathAny": [["deploy"], ["publish"]], "noneFlag": ["--dry-run"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "Worker deployment",
+      "billing": "usage-based",
+      "price": "unknown; Workers are billed by requests and CPU time above the plan allowance"
+    },
+    "fixtures": ["cloudflare-wrangler-deploy", "cloudflare-wrangler-deploy-dry-run", "cloudflare-wrangler-dev"]
+  },
+  {
+    "id": "cloudflare.d1.create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.d1.create",
+    "summary": "Creates a Cloudflare D1 database, billed by rows read/written and storage.",
+    "priority": 50,
+    "match": { "bin": ["wrangler"], "path": ["d1", "create"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "D1 database",
+      "billing": "usage-based",
+      "price": "unknown; billed by rows read/written and stored data above the plan allowance"
+    },
+    "fixtures": ["cloudflare-d1-create", "cloudflare-d1-list"]
+  },
+  {
+    "id": "cloudflare.kv.namespace-create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "storage-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.kv.namespace-create",
+    "summary": "Creates a Cloudflare KV namespace, billed by reads, writes, and storage.",
+    "priority": 50,
+    "match": {
+      "bin": ["wrangler"],
+      "pathAny": [["kv", "namespace", "create"], ["kv:namespace", "create"]]
+    },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "KV namespace",
+      "billing": "usage-based",
+      "price": "unknown; billed by reads, writes, deletes, and stored data above the plan allowance"
+    }
+  },
+  {
+    "id": "cloudflare.r2.bucket-create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "storage-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.r2.bucket-create",
+    "summary": "Creates a Cloudflare R2 bucket, billed by storage and operations.",
+    "priority": 50,
+    "match": { "bin": ["wrangler"], "path": ["r2", "bucket", "create"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "R2 bucket",
+      "billing": "usage-based",
+      "price": "unknown; billed by stored data and class A/B operations above the plan allowance"
+    },
+    "fixtures": ["cloudflare-r2-bucket-create", "cloudflare-r2-bucket-list"]
+  },
+  {
+    "id": "cloudflare.queues.create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "queue-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.queues.create",
+    "summary": "Creates a Cloudflare Queue, billed by operations.",
+    "priority": 50,
+    "match": { "bin": ["wrangler"], "path": ["queues", "create"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "Queue",
+      "billing": "usage-based",
+      "price": "unknown; billed by queue operations above the plan allowance"
+    }
+  },
+  {
+    "id": "cloudflare.hyperdrive.create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "network-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.hyperdrive.create",
+    "summary": "Creates a Cloudflare Hyperdrive configuration, a paid-capable resource.",
+    "priority": 50,
+    "match": { "bin": ["wrangler"], "path": ["hyperdrive", "create"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "Hyperdrive configuration",
+      "billing": "usage-based",
+      "price": "unknown; availability and cost depend on the plan"
+    }
+  },
+  {
+    "id": "cloudflare.tunnel.create",
+    "version": "1",
+    "provider": "Cloudflare",
+    "category": "network-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "cloudflare.tunnel.create",
+    "summary": "Creates a Cloudflare Tunnel, a capacity-related network resource.",
+    "priority": 50,
+    "match": { "bin": ["cloudflared"], "path": ["tunnel", "create"] },
+    "approval": {
+      "provider": "Cloudflare",
+      "resource": "Cloudflare Tunnel",
+      "billing": "unknown",
+      "price": "unknown; associated features and traffic may be billed depending on the plan"
+    }
+  }
+]

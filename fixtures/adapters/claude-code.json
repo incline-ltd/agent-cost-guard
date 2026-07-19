@@ -1,0 +1,49 @@
+[
+  {
+    "name": "cc-allow-describe",
+    "input": { "hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_input": { "command": "aws ec2 describe-instances" } },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "cc-ask-run-instances",
+    "input": { "tool_name": "Bash", "tool_input": { "command": "aws ec2 run-instances --instance-type t3.small" } },
+    "expect": { "permissionDecision": "ask", "reasonIncludes": "Cost confirmation required:", "exitCode": 0 }
+  },
+  {
+    "name": "cc-deny-guard-bypass",
+    "input": { "tool_name": "Bash", "tool_input": { "command": "export AGENT_COST_GUARD_DISABLED=true" } },
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "bypass", "exitCode": 0 }
+  },
+  {
+    "name": "cc-ask-terraform-write",
+    "input": { "tool_name": "Write", "tool_input": { "file_path": "main.tf", "content": "resource \"aws_instance\" \"web\" {\n  ami = \"ami-0abc\"\n}" } },
+    "expect": { "permissionDecision": "ask", "reasonIncludes": "Terraform-managed provider", "exitCode": 0 }
+  },
+  {
+    "name": "cc-allow-terraform-comment",
+    "input": { "tool_name": "Edit", "tool_input": { "file_path": "main.tf", "old_string": "x", "new_string": "# resource \"aws_instance\" \"web\" {}" } },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "cc-allow-mcp-tool",
+    "input": { "tool_name": "mcp__memory__create_entities", "tool_input": { "entities": [] } },
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "cc-malformed-nonstrict",
+    "rawInput": "this is not json",
+    "expect": { "empty": true, "exitCode": 0 }
+  },
+  {
+    "name": "cc-malformed-strict",
+    "rawInput": "this is not json",
+    "strict": true,
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "strict mode", "exitCode": 0 }
+  },
+  {
+    "name": "cc-missing-toolname-strict",
+    "input": { "tool_input": { "command": "aws s3 mb s3://x" } },
+    "strict": true,
+    "expect": { "permissionDecision": "deny", "reasonIncludes": "strict mode", "exitCode": 0 }
+  }
+]

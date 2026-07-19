@@ -1,0 +1,89 @@
+name: Host compatibility report
+description: Report whether a Claude, Codex, Cursor, or Copilot hook loaded and enforced a safe test.
+title: "[host]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Run only the harmless verification command from the integration guide. Never create a real cloud resource to test a hook.
+
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      options:
+        - Claude Code CLI
+        - Claude Desktop Code
+        - Codex CLI or app
+        - Cursor
+        - GitHub Copilot CLI
+        - GitHub Copilot for VS Code
+        - GitHub Copilot cloud agent
+        - Other before-tool host
+    validations:
+      required: true
+
+  - type: input
+    id: host-version
+    attributes:
+      label: Host version
+      placeholder: Exact version or build number
+    validations:
+      required: true
+
+  - type: input
+    id: guard-version
+    attributes:
+      label: Agent Cost Guard version
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system
+      placeholder: macOS 15, Ubuntu 24.04, Windows 11
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Safe verification result
+      options:
+        - The bypass command was denied with the expected reason
+        - The bypass command ran because the hook was not active
+        - The host reported a hook error
+        - The result was different
+    validations:
+      required: true
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Hook configuration
+      description: Paste the smallest relevant configuration with local paths generalized.
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Redacted host output
+      description: Include the visible status and decision. Remove credentials, account data, and private paths.
+      render: text
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I used the harmless verification command and did not test by creating a real paid resource.
+          required: true
+        - label: I removed credentials, private paths, and customer data from this report.
+          required: true

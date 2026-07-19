@@ -1,0 +1,284 @@
+[
+  {
+    "ruleId": "aws.ec2.run-instances",
+    "positive": { "kind": "shell", "command": "aws ec2 run-instances --image-id ami-00000000000000000" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-instances" },
+    "near": { "kind": "shell", "command": "aws ec2 run-instance --image-id ami-00000000000000000" }
+  },
+  {
+    "ruleId": "aws.ec2.request-spot-instances",
+    "positive": { "kind": "shell", "command": "aws ec2 request-spot-instances --instance-count 1" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-spot-instance-requests" },
+    "near": { "kind": "shell", "command": "aws ec2 request-spot-fleet" }
+  },
+  {
+    "ruleId": "aws.ec2.create-volume",
+    "positive": { "kind": "shell", "command": "aws ec2 create-volume --availability-zone us-east-1a --size 10" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-volumes" },
+    "near": { "kind": "shell", "command": "aws ec2 create-volume-backup" }
+  },
+  {
+    "ruleId": "aws.ec2.create-snapshot",
+    "positive": { "kind": "shell", "command": "aws ec2 create-snapshot --volume-id vol-00000000000000000" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-snapshots" },
+    "near": { "kind": "shell", "command": "aws ec2 create-snapshot-policy" }
+  },
+  {
+    "ruleId": "aws.rds.create-db-instance",
+    "positive": { "kind": "shell", "command": "aws rds create-db-instance --db-instance-identifier fake-db" },
+    "negative": { "kind": "shell", "command": "aws rds describe-db-instances" },
+    "near": { "kind": "shell", "command": "aws rds create-db-instance-read-replica --db-instance-identifier fake-db" }
+  },
+  {
+    "ruleId": "aws.rds.create-db-cluster",
+    "positive": { "kind": "shell", "command": "aws rds create-db-cluster --db-cluster-identifier fake-cluster" },
+    "negative": { "kind": "shell", "command": "aws rds describe-db-clusters" },
+    "near": { "kind": "shell", "command": "aws rds create-global-cluster --global-cluster-identifier fake-cluster" }
+  },
+  {
+    "ruleId": "aws.rds.create-db-snapshot",
+    "positive": { "kind": "shell", "command": "aws rds create-db-snapshot --db-snapshot-identifier fake-snapshot" },
+    "negative": { "kind": "shell", "command": "aws rds describe-db-snapshots" },
+    "near": { "kind": "shell", "command": "aws rds copy-db-snapshot --target-db-snapshot-identifier fake-snapshot" }
+  },
+  {
+    "ruleId": "aws.elasticache.create-cache-cluster",
+    "positive": { "kind": "shell", "command": "aws elasticache create-cache-cluster --cache-cluster-id fake-cache" },
+    "negative": { "kind": "shell", "command": "aws elasticache describe-cache-clusters" },
+    "near": { "kind": "shell", "command": "aws elasticache create-serverless-cache --serverless-cache-name fake-cache" }
+  },
+  {
+    "ruleId": "aws.elasticache.create-replication-group",
+    "positive": { "kind": "shell", "command": "aws elasticache create-replication-group --replication-group-id fake-group" },
+    "negative": { "kind": "shell", "command": "aws elasticache describe-replication-groups" },
+    "near": { "kind": "shell", "command": "aws elasticache modify-replication-group --replication-group-id fake-group" }
+  },
+  {
+    "ruleId": "aws.s3.mb",
+    "positive": { "kind": "shell", "command": "aws s3 mb s3://fake-cost-guard-bucket" },
+    "negative": { "kind": "shell", "command": "aws s3 ls s3://fake-cost-guard-bucket" },
+    "near": { "kind": "shell", "command": "aws s3 rb s3://fake-cost-guard-bucket" }
+  },
+  {
+    "ruleId": "aws.s3api.create-bucket",
+    "positive": { "kind": "shell", "command": "aws s3api create-bucket --bucket fake-cost-guard-bucket" },
+    "negative": { "kind": "shell", "command": "aws s3api list-buckets" },
+    "near": { "kind": "shell", "command": "aws s3api create-bucket-metadata-table-configuration --bucket fake-cost-guard-bucket" }
+  },
+  {
+    "ruleId": "aws.rds.modify-db-instance.capacity",
+    "positive": { "kind": "shell", "command": "aws rds modify-db-instance --db-instance-identifier fake-db --db-instance-class db.t3.small" },
+    "negative": { "kind": "shell", "command": "aws rds describe-db-instances" },
+    "near": { "kind": "shell", "command": "aws rds modify-db-instance --db-instance-identifier fake-db --no-multi-az" }
+  },
+  {
+    "ruleId": "aws.ec2.modify-instance-attribute.type",
+    "positive": { "kind": "shell", "command": "aws ec2 modify-instance-attribute --instance-id i-00000000000000000 --instance-type t3.small" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-instance-attribute --instance-id i-00000000000000000" },
+    "near": { "kind": "shell", "command": "aws ec2 modify-instance-attribute --instance-id i-00000000000000000 --ena-support" }
+  },
+  {
+    "ruleId": "aws.ec2.modify-volume.capacity",
+    "positive": { "kind": "shell", "command": "aws ec2 modify-volume --volume-id vol-00000000000000000 --size 20" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-volumes-modifications" },
+    "near": { "kind": "shell", "command": "aws ec2 modify-volume --volume-id vol-00000000000000000" }
+  },
+  {
+    "ruleId": "aws.autoscaling.update-auto-scaling-group.capacity",
+    "positive": { "kind": "shell", "command": "aws autoscaling update-auto-scaling-group --auto-scaling-group-name fake-group --max-size 3" },
+    "negative": { "kind": "shell", "command": "aws autoscaling describe-auto-scaling-groups" },
+    "near": { "kind": "shell", "command": "aws autoscaling update-auto-scaling-group --auto-scaling-group-name fake-group --min-size 1" }
+  },
+  {
+    "ruleId": "aws.application-autoscaling.register-scalable-target.max",
+    "positive": { "kind": "shell", "command": "aws application-autoscaling register-scalable-target --resource-id service/fake --max-capacity 3" },
+    "negative": { "kind": "shell", "command": "aws application-autoscaling describe-scalable-targets" },
+    "near": { "kind": "shell", "command": "aws application-autoscaling register-scalable-target --resource-id service/fake --min-capacity 1" }
+  },
+  {
+    "ruleId": "aws.lambda.put-provisioned-concurrency-config",
+    "positive": { "kind": "shell", "command": "aws lambda put-provisioned-concurrency-config --function-name fake-function --provisioned-concurrent-executions 2" },
+    "negative": { "kind": "shell", "command": "aws lambda get-provisioned-concurrency-config --function-name fake-function" },
+    "near": { "kind": "shell", "command": "aws lambda delete-provisioned-concurrency-config --function-name fake-function" }
+  },
+  {
+    "ruleId": "aws.rds.modify-db-cluster.capacity",
+    "positive": { "kind": "shell", "command": "aws rds modify-db-cluster --db-cluster-identifier fake-cluster --allocated-storage 20" },
+    "negative": { "kind": "shell", "command": "aws rds describe-db-clusters" },
+    "near": { "kind": "shell", "command": "aws rds modify-db-cluster --db-cluster-identifier fake-cluster --backup-retention-period 1" }
+  },
+  {
+    "ruleId": "aws.ec2.purchase-reserved-instances-offering",
+    "positive": { "kind": "shell", "command": "aws ec2 purchase-reserved-instances-offering --reserved-instances-offering-id fake-offering" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-reserved-instances-offerings" },
+    "near": { "kind": "shell", "command": "aws ec2 accept-reserved-instances-exchange-quote --reserved-instance-ids fake-reservation" }
+  },
+  {
+    "ruleId": "aws.rds.purchase-reserved-db-instances-offering",
+    "positive": { "kind": "shell", "command": "aws rds purchase-reserved-db-instances-offering --reserved-db-instances-offering-id fake-offering" },
+    "negative": { "kind": "shell", "command": "aws rds describe-reserved-db-instances-offerings" },
+    "near": { "kind": "shell", "command": "aws rds purchase-reserved-db-instances-offerings --reserved-db-instances-offering-id fake-offering" }
+  },
+  {
+    "ruleId": "aws.savingsplans.create-savings-plan",
+    "positive": { "kind": "shell", "command": "aws savingsplans create-savings-plan --savings-plan-offering-id fake-offering --commitment 1" },
+    "negative": { "kind": "shell", "command": "aws savingsplans describe-savings-plans" },
+    "near": { "kind": "shell", "command": "aws savingsplans describe-savings-plan-rates --savings-plan-id fake-plan" }
+  },
+  {
+    "ruleId": "aws.ec2.purchase-host-reservation",
+    "positive": { "kind": "shell", "command": "aws ec2 purchase-host-reservation --offering-id fake-offering --host-id-set fake-host" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-host-reservations" },
+    "near": { "kind": "shell", "command": "aws ec2 get-host-reservation-purchase-preview --offering-id fake-offering" }
+  },
+  {
+    "ruleId": "aws.ec2.create-nat-gateway",
+    "positive": { "kind": "shell", "command": "aws ec2 create-nat-gateway --subnet-id subnet-00000000000000000" },
+    "negative": { "kind": "shell", "command": "aws ec2 describe-nat-gateways" },
+    "near": { "kind": "shell", "command": "aws ec2 create-nat-gateways --subnet-id subnet-00000000000000000" }
+  },
+  {
+    "ruleId": "aws.eks.create-cluster",
+    "positive": { "kind": "shell", "command": "aws eks create-cluster --name fake-cluster" },
+    "negative": { "kind": "shell", "command": "aws eks describe-cluster --name fake-cluster" },
+    "near": { "kind": "shell", "command": "aws eks create-clusters --name fake-cluster" }
+  },
+  {
+    "ruleId": "aws.ecs.run-task",
+    "positive": { "kind": "shell", "command": "aws ecs run-task --cluster fake-cluster --task-definition fake-task" },
+    "negative": { "kind": "shell", "command": "aws ecs list-tasks --cluster fake-cluster" },
+    "near": { "kind": "shell", "command": "aws ecs run-tasks --cluster fake-cluster --task-definition fake-task" }
+  },
+  {
+    "ruleId": "aws.elbv2.create-load-balancer",
+    "positive": { "kind": "shell", "command": "aws elbv2 create-load-balancer --name fake-load-balancer" },
+    "negative": { "kind": "shell", "command": "aws elbv2 describe-load-balancers" },
+    "near": { "kind": "shell", "command": "aws elbv2 create-load-balancers --name fake-load-balancer" }
+  },
+  {
+    "ruleId": "aws.lightsail.create-instances",
+    "positive": { "kind": "shell", "command": "aws lightsail create-instances --instance-names fake-instance --bundle-id fake-bundle" },
+    "negative": { "kind": "shell", "command": "aws lightsail get-instances" },
+    "near": { "kind": "shell", "command": "aws lightsail create-instance --instance-names fake-instance --bundle-id fake-bundle" }
+  },
+  {
+    "ruleId": "aws.opensearch.create-domain",
+    "positive": { "kind": "shell", "command": "aws opensearch create-domain --domain-name fake-domain" },
+    "negative": { "kind": "shell", "command": "aws opensearch describe-domain --domain-name fake-domain" },
+    "near": { "kind": "shell", "command": "aws opensearch create-domains --domain-name fake-domain" }
+  },
+  {
+    "ruleId": "aws.redshift.create-cluster",
+    "positive": { "kind": "shell", "command": "aws redshift create-cluster --cluster-identifier fake-cluster --node-type fake-node" },
+    "negative": { "kind": "shell", "command": "aws redshift describe-clusters" },
+    "near": { "kind": "shell", "command": "aws redshift create-clusters --cluster-identifier fake-cluster --node-type fake-node" }
+  },
+  {
+    "ruleId": "aws.dynamodb.create-table",
+    "positive": { "kind": "shell", "command": "aws dynamodb create-table --table-name fake-table" },
+    "negative": { "kind": "shell", "command": "aws dynamodb describe-table --table-name fake-table" },
+    "near": { "kind": "shell", "command": "aws dynamodb create-tables --table-name fake-table" }
+  },
+  {
+    "ruleId": "cloudflare.wrangler.deploy",
+    "positive": { "kind": "shell", "command": "wrangler deploy" },
+    "negative": { "kind": "shell", "command": "wrangler dev" },
+    "near": { "kind": "shell", "command": "wrangler deploy --dry-run" }
+  },
+  {
+    "ruleId": "cloudflare.d1.create",
+    "positive": { "kind": "shell", "command": "wrangler d1 create fake-database" },
+    "negative": { "kind": "shell", "command": "wrangler d1 list" },
+    "near": { "kind": "shell", "command": "wrangler d1 create-backup fake-database" }
+  },
+  {
+    "ruleId": "cloudflare.kv.namespace-create",
+    "positive": { "kind": "shell", "command": "wrangler kv namespace create FAKE_NAMESPACE" },
+    "negative": { "kind": "shell", "command": "wrangler kv namespace list" },
+    "near": { "kind": "shell", "command": "wrangler kv namespace delete FAKE_NAMESPACE" }
+  },
+  {
+    "ruleId": "cloudflare.r2.bucket-create",
+    "positive": { "kind": "shell", "command": "wrangler r2 bucket create fake-bucket" },
+    "negative": { "kind": "shell", "command": "wrangler r2 bucket list" },
+    "near": { "kind": "shell", "command": "wrangler r2 bucket create-local fake-bucket" }
+  },
+  {
+    "ruleId": "cloudflare.queues.create",
+    "positive": { "kind": "shell", "command": "wrangler queues create fake-queue" },
+    "negative": { "kind": "shell", "command": "wrangler queues list" },
+    "near": { "kind": "shell", "command": "wrangler queues delete fake-queue" }
+  },
+  {
+    "ruleId": "cloudflare.hyperdrive.create",
+    "positive": { "kind": "shell", "command": "wrangler hyperdrive create fake-hyperdrive" },
+    "negative": { "kind": "shell", "command": "wrangler hyperdrive list" },
+    "near": { "kind": "shell", "command": "wrangler hyperdrive update fake-hyperdrive" }
+  },
+  {
+    "ruleId": "cloudflare.tunnel.create",
+    "positive": { "kind": "shell", "command": "cloudflared tunnel create fake-tunnel" },
+    "negative": { "kind": "shell", "command": "cloudflared tunnel list" },
+    "near": { "kind": "shell", "command": "cloudflared tunnel run fake-tunnel" }
+  },
+  {
+    "ruleId": "generic.cost-guard-bypass",
+    "positive": { "kind": "shell", "command": "AGENT_COST_GUARD_SECRET_DISABLED=1 terraform plan" },
+    "negative": { "kind": "shell", "command": "MY_FEATURE_DISABLED=1 terraform plan" },
+    "near": { "kind": "shell", "command": "AGENT_COST_GUARD_SECRET_DISABLED=0 terraform plan" }
+  },
+  {
+    "ruleId": "generic.purchase-credits",
+    "positive": { "kind": "shell", "command": "billingctl purchase credits --amount 10" },
+    "negative": { "kind": "shell", "command": "billingctl list credits" },
+    "near": { "kind": "shell", "command": "billingctl purchase quota --amount 10" }
+  },
+  {
+    "ruleId": "generic.plan-upgrade",
+    "positive": { "kind": "shell", "command": "billingctl upgrade plan --name fake-pro" },
+    "negative": { "kind": "shell", "command": "billingctl list plans" },
+    "near": { "kind": "shell", "command": "packagectl upgrade package fake-library" }
+  },
+  {
+    "ruleId": "generic.snapshot-create.pair",
+    "positive": { "kind": "shell", "command": "vmctl create snapshot fake-snapshot" },
+    "negative": { "kind": "shell", "command": "vmctl list snapshots" },
+    "near": { "kind": "shell", "command": "vmctl create image fake-image" }
+  },
+  {
+    "ruleId": "generic.snapshot-create.token",
+    "positive": { "kind": "shell", "command": "vmctl create-snapshot fake-snapshot" },
+    "negative": { "kind": "shell", "command": "vmctl list-snapshots" },
+    "near": { "kind": "shell", "command": "vmctl create-snapshot-policy fake-policy" }
+  },
+  {
+    "ruleId": "generic.backup-create.pair",
+    "positive": { "kind": "shell", "command": "dbctl create backup fake-backup" },
+    "negative": { "kind": "shell", "command": "dbctl restore backup fake-backup" },
+    "near": { "kind": "shell", "command": "dbctl create export fake-export" }
+  },
+  {
+    "ruleId": "generic.scale-up",
+    "positive": { "kind": "shell", "command": "kubectl scale deployment fake-app --replicas=3" },
+    "negative": { "kind": "shell", "command": "kubectl get deployment fake-app" },
+    "near": { "kind": "shell", "command": "kubectl scale deployment fake-app --replicas=1" }
+  },
+  {
+    "ruleId": "generic.tool.cost-bearing-name",
+    "positive": { "kind": "tool", "name": "create_database", "arguments": { "name": "fake-database" } },
+    "negative": { "kind": "tool", "name": "describe_database", "arguments": { "name": "fake-database" } },
+    "near": { "kind": "tool", "name": "create_project", "arguments": { "name": "fake-project" } }
+  },
+  {
+    "ruleId": "terraform.apply",
+    "positive": { "kind": "shell", "command": "terraform apply fake.plan" },
+    "negative": { "kind": "shell", "command": "terraform plan -out fake.plan" },
+    "near": { "kind": "shell", "command": "terraform apply-preview fake.plan" }
+  },
+  {
+    "ruleId": "terraform.resource-added",
+    "positive": { "kind": "file-change", "path": "infra/main.tf", "addedText": "resource \"aws_instance\" \"fake_app\" {\n}" },
+    "negative": { "kind": "file-change", "path": "infra/main.tf", "addedText": "variable \"region\" {\n}" },
+    "near": { "kind": "file-change", "path": "infra/main.tf", "addedText": "data \"aws_instance\" \"fake_app\" {\n}" }
+  }
+]

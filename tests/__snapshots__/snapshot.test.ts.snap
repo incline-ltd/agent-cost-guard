@@ -1,0 +1,210 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`deterministic output > produces stable decision JSON for representative commands 1`] = `
+[
+  {
+    "command": "aws ec2 run-instances --instance-type t3.small",
+    "decision": {
+      "approval": {
+        "billing": "mixed",
+        "price": "unknown because region, instance type, count, and runtime determine the cost",
+        "provider": "AWS",
+        "resource": "EC2 instance(s)",
+      },
+      "approvals": [
+        {
+          "billing": "mixed",
+          "price": "unknown because region, instance type, count, and runtime determine the cost",
+          "provider": "AWS",
+          "resource": "EC2 instance(s)",
+        },
+      ],
+      "decision": "approval-required",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "compute-create",
+          "redactedEvidence": "aws ec2 run-instances --instance-type t3.small",
+          "ruleId": "aws.ec2.run-instances",
+        },
+      ],
+      "reasonCode": "aws.ec2.run-instances",
+      "summary": "Launches new EC2 instances, which start recurring compute billing.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "aws s3 mb s3://demo",
+    "decision": {
+      "approval": {
+        "billing": "usage-based",
+        "price": "unknown; storage, requests, and data transfer are billed by usage",
+        "provider": "AWS",
+        "resource": "S3 bucket",
+      },
+      "approvals": [
+        {
+          "billing": "usage-based",
+          "price": "unknown; storage, requests, and data transfer are billed by usage",
+          "provider": "AWS",
+          "resource": "S3 bucket",
+        },
+      ],
+      "decision": "approval-required",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "storage-create",
+          "redactedEvidence": "aws s3 mb s3://demo",
+          "ruleId": "aws.s3.mb",
+        },
+      ],
+      "reasonCode": "aws.s3.mb",
+      "summary": "Creates an S3 bucket; storage, requests, and transfer are billed by use.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "terraform apply saved.plan",
+    "decision": {
+      "approval": {
+        "billing": "unknown",
+        "price": "unknown until the reviewed plan is mapped to provider pricing",
+        "provider": "Terraform-managed provider",
+        "resource": "planned infrastructure changes",
+      },
+      "approvals": [
+        {
+          "billing": "unknown",
+          "price": "unknown until the reviewed plan is mapped to provider pricing",
+          "provider": "Terraform-managed provider",
+          "resource": "planned infrastructure changes",
+        },
+      ],
+      "decision": "approval-required",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "infrastructure-apply",
+          "redactedEvidence": "terraform apply saved.plan",
+          "ruleId": "terraform.apply",
+        },
+      ],
+      "reasonCode": "terraform.apply",
+      "summary": "terraform apply can create or change billable infrastructure.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "wrangler deploy",
+    "decision": {
+      "approval": {
+        "billing": "usage-based",
+        "price": "unknown; Workers are billed by requests and CPU time above the plan allowance",
+        "provider": "Cloudflare",
+        "resource": "Worker deployment",
+      },
+      "approvals": [
+        {
+          "billing": "usage-based",
+          "price": "unknown; Workers are billed by requests and CPU time above the plan allowance",
+          "provider": "Cloudflare",
+          "resource": "Worker deployment",
+        },
+      ],
+      "decision": "approval-required",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "compute-deploy",
+          "redactedEvidence": "wrangler deploy",
+          "ruleId": "cloudflare.wrangler.deploy",
+        },
+      ],
+      "reasonCode": "cloudflare.wrangler.deploy",
+      "summary": "Deploys a Cloudflare Worker, which can incur request and compute charges.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "kubectl scale deployment web --replicas=4",
+    "decision": {
+      "approval": {
+        "billing": "usage-based",
+        "price": "unknown; more replicas or capacity increases cost",
+        "provider": "unknown (confirm from the command)",
+        "resource": "replica or capacity increase",
+      },
+      "approvals": [
+        {
+          "billing": "usage-based",
+          "price": "unknown; more replicas or capacity increases cost",
+          "provider": "unknown (confirm from the command)",
+          "resource": "replica or capacity increase",
+        },
+      ],
+      "decision": "approval-required",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "capacity-increase",
+          "redactedEvidence": "kubectl scale --replicas=4",
+          "ruleId": "generic.scale-up",
+        },
+      ],
+      "reasonCode": "generic.scale-up",
+      "summary": "Increasing replicas or capacity can raise cost.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "AGENT_COST_GUARD_DISABLED=1 terraform apply",
+    "decision": {
+      "decision": "block",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [
+        {
+          "category": "guard-bypass",
+          "redactedEvidence": "AGENT_COST_GUARD_DISABLED=1",
+          "ruleId": "generic.cost-guard-bypass",
+        },
+      ],
+      "reasonCode": "guard.bypass",
+      "summary": "Blocked: this command attempts to disable, turn off, or bypass the active cost guard.",
+      "version": "1",
+    },
+  },
+  {
+    "command": "aws ec2 describe-instances",
+    "decision": {
+      "decision": "allow",
+      "inspection": {
+        "complete": true,
+        "issues": [],
+      },
+      "matches": [],
+      "reasonCode": "cost.no-match",
+      "summary": "No cost-bearing action matched this cost policy. This is not a general security approval.",
+      "version": "1",
+    },
+  },
+]
+`;

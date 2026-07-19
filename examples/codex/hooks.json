@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$(git rev-parse --show-toplevel)/node_modules/.bin/agent-cost-guard\" hook codex --strict",
+            "commandWindows": "powershell -NoProfile -Command \"$root = git rev-parse --show-toplevel; & (Join-Path $root 'node_modules\\.bin\\agent-cost-guard.cmd') hook codex --strict\"",
+            "timeout": 10,
+            "statusMessage": "Checking cost policy"
+          }
+        ]
+      }
+    ]
+  }
+}

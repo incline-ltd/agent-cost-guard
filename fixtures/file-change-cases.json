@@ -1,0 +1,82 @@
+[
+  {
+    "name": "terraform-add-resource",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": "resource \"aws_instance\" \"web\" {\n  ami           = \"ami-0abc123\"\n  instance_type = \"t3.small\"\n}"
+    },
+    "expect": { "decision": "approval-required", "reasonCode": "terraform.resource-added" }
+  },
+  {
+    "name": "terraform-comment-only",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": "# resource \"aws_instance\" \"web\" {\n#   instance_type = \"t3.small\"\n# }"
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-block-comment",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": "/*\nresource \"aws_instance\" \"web\" {\n  instance_type = \"t3.small\"\n}\n*/"
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-slash-comment",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": "// resource \"aws_instance\" \"web\" {}"
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-remove-resource",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": ""
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-data-block",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "main.tf",
+      "addedText": "data \"aws_ami\" \"ubuntu\" {\n  most_recent = true\n}"
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "terraform-variable-block",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "variables.tf",
+      "addedText": "variable \"region\" {\n  default = \"us-east-1\"\n}"
+    },
+    "expect": { "decision": "allow" }
+  },
+  {
+    "name": "non-terraform-file",
+    "group": "file-change",
+    "action": {
+      "kind": "file-change",
+      "path": "README.md",
+      "addedText": "resource \"aws_instance\" \"web\" {}"
+    },
+    "expect": { "decision": "allow" }
+  }
+]

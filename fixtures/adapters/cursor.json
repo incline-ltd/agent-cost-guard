@@ -1,0 +1,68 @@
+[
+  {
+    "name": "cursor-neutral-read-only-shell",
+    "input": {
+      "hook_event_name": "preToolUse",
+      "tool_name": "Shell",
+      "tool_input": { "command": "aws s3 ls", "cwd": "/fake/project" },
+      "tool_use_id": "fake-tool-use"
+    },
+    "expect": { "neutral": true, "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-cost-shell",
+    "input": { "tool_name": "Shell", "tool_input": { "command": "terraform apply" } },
+    "expect": { "permission": "deny", "reasonIncludes": "Cost confirmation required:", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-guard-bypass",
+    "input": { "tool_name": "Shell", "tool_input": { "command": "AGENT_COST_GUARD=off make deploy" } },
+    "expect": { "permission": "deny", "reasonIncludes": "bypass", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-terraform-write",
+    "input": {
+      "tool_name": "Write",
+      "tool_input": { "file_path": "infra/main.tf", "content": "resource \"aws_instance\" \"fake_web\" {}" }
+    },
+    "expect": { "permission": "deny", "reasonIncludes": "Terraform-managed provider", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-terraform-applypatch",
+    "input": {
+      "tool_name": "ApplyPatch",
+      "tool_input": { "patch": "*** Begin Patch\n*** Update File: infra/main.tf\n@@\n+resource \"aws_instance\" \"fake_web\" {}\n*** End Patch" }
+    },
+    "expect": { "permission": "deny", "reasonIncludes": "Terraform-managed provider", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-neutral-benign-applypatch",
+    "input": {
+      "tool_name": "ApplyPatch",
+      "tool_input": { "patch": "*** Begin Patch\n*** Update File: src/app.ts\n@@\n+export const ready = true;\n*** End Patch" }
+    },
+    "expect": { "neutral": true, "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-cost-mcp-tool",
+    "input": { "tool_name": "MCP:cloud_create_database", "tool_input": { "name": "fake-db" } },
+    "expect": { "permission": "deny", "reasonIncludes": "structured tool call", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-deny-uninspectable-shell-strict",
+    "input": { "tool_name": "Shell", "tool_input": { "command": 42 } },
+    "strict": true,
+    "expect": { "permission": "deny", "reasonIncludes": "completely inspected", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-malformed-strict",
+    "rawInput": "not json",
+    "strict": true,
+    "expect": { "permission": "deny", "reasonIncludes": "strict mode", "exitCode": 0 }
+  },
+  {
+    "name": "cursor-malformed-nonstrict",
+    "rawInput": "not json",
+    "expect": { "neutral": true, "exitCode": 0 }
+  }
+]

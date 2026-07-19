@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "command": "node node_modules/@ashishkaloge/agent-cost-guard/dist/bin.js hook cursor --strict",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ]
+  }
+}

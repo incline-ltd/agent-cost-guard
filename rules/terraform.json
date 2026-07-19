@@ -1,0 +1,40 @@
+[
+  {
+    "id": "terraform.apply",
+    "version": "1",
+    "provider": "Terraform-managed provider",
+    "category": "infrastructure-apply",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "terraform.apply",
+    "summary": "terraform apply can create or change billable infrastructure.",
+    "priority": 50,
+    "match": { "bin": ["terraform", "tofu"], "path": ["apply"] },
+    "approval": {
+      "provider": "Terraform-managed provider",
+      "resource": "planned infrastructure changes",
+      "billing": "unknown",
+      "price": "unknown until the reviewed plan is mapped to provider pricing"
+    },
+    "fixtures": ["terraform-apply", "terraform-plan", "terraform-validate", "terraform-destroy"]
+  },
+  {
+    "id": "terraform.resource-added",
+    "version": "1",
+    "provider": "Terraform-managed provider",
+    "category": "infrastructure-add",
+    "actionForm": "file-change",
+    "decision": "approval-required",
+    "reasonCode": "terraform.resource-added",
+    "summary": "A new Terraform resource block was added, which can create billable infrastructure.",
+    "priority": 50,
+    "match": { "pathSuffix": [".tf", ".tf.json", ".tofu"], "special": "terraform-added-resource" },
+    "approval": {
+      "provider": "Terraform-managed provider",
+      "resource": "newly declared resource block",
+      "billing": "unknown",
+      "price": "unknown until the resource is mapped to provider pricing"
+    },
+    "fixtures": ["terraform-add-resource", "terraform-comment-only", "terraform-remove-resource"]
+  }
+]

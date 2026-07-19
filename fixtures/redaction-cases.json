@@ -1,0 +1,75 @@
+[
+  {
+    "name": "rds-password-flag",
+    "input": "aws rds create-db-instance --master-user-password P4ssw0rd-fake!",
+    "absent": ["P4ssw0rd-fake!"],
+    "present": ["--master-user-password", "[REDACTED]"]
+  },
+  {
+    "name": "authorization-bearer-header",
+    "input": "curl -H 'Authorization: Bearer sk-test-ABCDEF1234567890GHIJ' https://api.example.com",
+    "absent": ["sk-test-ABCDEF1234567890GHIJ"],
+    "present": ["Authorization", "[REDACTED]"]
+  },
+  {
+    "name": "github-token-export",
+    "input": "export GITHUB_TOKEN=ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    "absent": ["ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"],
+    "present": ["GITHUB_TOKEN"]
+  },
+  {
+    "name": "aws-secret-access-key-assignment",
+    "input": "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMIfakeK7MDENGfakeEXAMPLEKEY aws s3 ls",
+    "absent": ["wJalrXUtnFEMIfakeK7MDENGfakeEXAMPLEKEY"],
+    "present": ["AWS_SECRET_ACCESS_KEY"]
+  },
+  {
+    "name": "aws-access-key-id",
+    "input": "aws_access_key_id = AKIAIOSFODNN7EXAMPLE",
+    "absent": ["AKIAIOSFODNN7EXAMPLE"],
+    "present": ["REDACTED"]
+  },
+  {
+    "name": "pem-private-key",
+    "input": "-----BEGIN RSA PRIVATE KEY-----\nMIIabc123FAKEkeymaterial==\n-----END RSA PRIVATE KEY-----",
+    "absent": ["MIIabc123FAKEkeymaterial"],
+    "present": ["[REDACTED:PRIVATE_KEY]"]
+  },
+  {
+    "name": "url-userinfo-password",
+    "input": "git clone https://ashish:s3cr3t-fake@github.com/acme/repo.git",
+    "absent": ["s3cr3t-fake"],
+    "present": ["ashish:[REDACTED]@"]
+  },
+  {
+    "name": "slack-token-assignment",
+    "input": "SLACK_TOKEN=definitely-not-a-real-token",
+    "absent": ["definitely-not-a-real-token"],
+    "present": ["SLACK_TOKEN"]
+  },
+  {
+    "name": "stripe-key-flag",
+    "input": "stripe listen --api-key sk_live_ABCDEF1234567890GHIJKL",
+    "absent": ["sk_live_ABCDEF1234567890GHIJKL"],
+    "present": ["--api-key"]
+  },
+  {
+    "name": "google-api-key-in-url",
+    "input": "curl 'https://maps.googleapis.com/maps/api?key=AIzaSyD1234567890abcdefghijklmnopqrstuv'",
+    "absent": ["AIzaSyD1234567890abcdefghijklmnopqrstuv"],
+    "present": ["[REDACTED:GOOGLE_API_KEY]"]
+  },
+  {
+    "name": "jwt-token",
+    "input": "AUTH=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5NfakeSig",
+    "absent": ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"],
+    "present": ["[REDACTED:JWT]"]
+  },
+  {
+    "name": "no-secret-unchanged",
+    "input": "aws ec2 describe-instances --region us-east-1",
+    "unchanged": true,
+    "absent": [],
+    "present": []
+  }
+]

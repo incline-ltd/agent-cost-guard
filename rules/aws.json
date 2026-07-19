@@ -1,0 +1,572 @@
+[
+  {
+    "id": "aws.ec2.run-instances",
+    "version": "1",
+    "provider": "AWS",
+    "category": "compute-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.run-instances",
+    "summary": "Launches new EC2 instances, which start recurring compute billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "run-instances"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 instance(s)",
+      "billing": "mixed",
+      "price": "unknown because region, instance type, count, and runtime determine the cost"
+    },
+    "fixtures": ["aws-ec2-run-instances", "aws-ec2-describe-instances", "aws-ec2-run-instances-help"]
+  },
+  {
+    "id": "aws.ec2.request-spot-instances",
+    "version": "1",
+    "provider": "AWS",
+    "category": "compute-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.request-spot-instances",
+    "summary": "Requests EC2 spot instances, which start usage-based compute billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "request-spot-instances"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 spot instance(s)",
+      "billing": "usage-based",
+      "price": "unknown; spot pricing varies by region, instance type, and capacity"
+    }
+  },
+  {
+    "id": "aws.ec2.create-volume",
+    "version": "1",
+    "provider": "AWS",
+    "category": "storage-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.create-volume",
+    "summary": "Creates an EBS volume, billed for provisioned storage.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "create-volume"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EBS volume",
+      "billing": "usage-based",
+      "price": "unknown; billed per provisioned GB-month, plus IOPS/throughput on some volume types"
+    }
+  },
+  {
+    "id": "aws.ec2.create-snapshot",
+    "version": "1",
+    "provider": "AWS",
+    "category": "snapshot-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.create-snapshot",
+    "summary": "Creates an EBS snapshot, billed for snapshot storage.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "pathAny": [["ec2", "create-snapshot"], ["ec2", "create-snapshots"]] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EBS snapshot",
+      "billing": "usage-based",
+      "price": "unknown; billed per GB-month of snapshot storage"
+    },
+    "fixtures": ["aws-ec2-create-snapshot", "aws-ec2-describe-snapshots"]
+  },
+  {
+    "id": "aws.rds.create-db-instance",
+    "version": "1",
+    "provider": "AWS",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.create-db-instance",
+    "summary": "Creates an RDS database instance, which starts recurring billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["rds", "create-db-instance"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS database instance",
+      "billing": "mixed",
+      "price": "unknown because instance class, storage, and runtime determine the cost"
+    },
+    "fixtures": ["aws-rds-create-db-instance", "aws-rds-describe-db-instances"]
+  },
+  {
+    "id": "aws.rds.create-db-cluster",
+    "version": "1",
+    "provider": "AWS",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.create-db-cluster",
+    "summary": "Creates an RDS database cluster, which starts recurring billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["rds", "create-db-cluster"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS database cluster",
+      "billing": "mixed",
+      "price": "unknown because engine, capacity, storage, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.rds.create-db-snapshot",
+    "version": "1",
+    "provider": "AWS",
+    "category": "snapshot-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.create-db-snapshot",
+    "summary": "Creates an RDS snapshot, billed for snapshot storage.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "pathAny": [["rds", "create-db-snapshot"], ["rds", "create-db-cluster-snapshot"]] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS snapshot",
+      "billing": "usage-based",
+      "price": "unknown; billed per GB-month of backup storage beyond the free allowance"
+    }
+  },
+  {
+    "id": "aws.elasticache.create-cache-cluster",
+    "version": "1",
+    "provider": "AWS",
+    "category": "cache-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.elasticache.create-cache-cluster",
+    "summary": "Creates an ElastiCache cluster, which starts recurring billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["elasticache", "create-cache-cluster"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "ElastiCache cluster",
+      "billing": "mixed",
+      "price": "unknown because node type, count, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.elasticache.create-replication-group",
+    "version": "1",
+    "provider": "AWS",
+    "category": "cache-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.elasticache.create-replication-group",
+    "summary": "Creates an ElastiCache replication group, which starts recurring billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["elasticache", "create-replication-group"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "ElastiCache replication group",
+      "billing": "mixed",
+      "price": "unknown because node type, replica count, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.s3.mb",
+    "version": "1",
+    "provider": "AWS",
+    "category": "storage-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.s3.mb",
+    "summary": "Creates an S3 bucket; storage, requests, and transfer are billed by use.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["s3", "mb"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "S3 bucket",
+      "billing": "usage-based",
+      "price": "unknown; storage, requests, and data transfer are billed by usage"
+    },
+    "fixtures": ["aws-s3-mb", "aws-s3-ls"]
+  },
+  {
+    "id": "aws.s3api.create-bucket",
+    "version": "1",
+    "provider": "AWS",
+    "category": "storage-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.s3api.create-bucket",
+    "summary": "Creates an S3 bucket; storage, requests, and transfer are billed by use.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["s3api", "create-bucket"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "S3 bucket",
+      "billing": "usage-based",
+      "price": "unknown; storage, requests, and data transfer are billed by usage"
+    }
+  },
+  {
+    "id": "aws.rds.modify-db-instance.capacity",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.modify-db-instance.capacity",
+    "summary": "Changes RDS instance class, storage, or throughput, which can raise cost.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["rds", "modify-db-instance"],
+      "anyFlag": ["--db-instance-class", "--allocated-storage", "--max-allocated-storage", "--iops", "--storage-throughput"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS instance capacity (class, storage, or throughput)",
+      "billing": "mixed",
+      "price": "unknown; depends on the new instance class, storage, and throughput"
+    },
+    "fixtures": ["aws-rds-modify-db-instance-class", "aws-rds-modify-db-instance-tags"]
+  },
+  {
+    "id": "aws.ec2.modify-instance-attribute.type",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.modify-instance-attribute.type",
+    "summary": "Changes an EC2 instance type, which can raise compute cost.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["ec2", "modify-instance-attribute"],
+      "anyFlag": ["--instance-type"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 instance type change",
+      "billing": "mixed",
+      "price": "unknown; depends on the new instance type"
+    }
+  },
+  {
+    "id": "aws.ec2.modify-volume.capacity",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.modify-volume.capacity",
+    "summary": "Changes EBS volume size, IOPS, or throughput, which can raise cost.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["ec2", "modify-volume"],
+      "anyFlag": ["--size", "--iops", "--throughput", "--volume-type"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EBS volume capacity change",
+      "billing": "usage-based",
+      "price": "unknown; depends on the new size, IOPS, and throughput"
+    }
+  },
+  {
+    "id": "aws.autoscaling.update-auto-scaling-group.capacity",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.autoscaling.update-auto-scaling-group.capacity",
+    "summary": "Raises an Auto Scaling group maximum or desired capacity.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["autoscaling", "update-auto-scaling-group"],
+      "anyFlag": ["--max-size", "--desired-capacity"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Auto Scaling group capacity",
+      "billing": "mixed",
+      "price": "unknown; more running instances increase compute cost"
+    }
+  },
+  {
+    "id": "aws.application-autoscaling.register-scalable-target.max",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.application-autoscaling.register-scalable-target.max",
+    "summary": "Raises an Application Auto Scaling maximum capacity.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["application-autoscaling", "register-scalable-target"],
+      "anyFlag": ["--max-capacity"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Application Auto Scaling maximum capacity",
+      "billing": "mixed",
+      "price": "unknown; higher maximum capacity can increase cost under load"
+    }
+  },
+  {
+    "id": "aws.lambda.put-provisioned-concurrency-config",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.lambda.put-provisioned-concurrency-config",
+    "summary": "Configures Lambda provisioned concurrency, billed while configured.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["lambda", "put-provisioned-concurrency-config"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Lambda provisioned concurrency",
+      "billing": "mixed",
+      "price": "unknown; billed for provisioned concurrency for as long as it is configured"
+    }
+  },
+  {
+    "id": "aws.rds.modify-db-cluster.capacity",
+    "version": "1",
+    "provider": "AWS",
+    "category": "capacity-increase",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.modify-db-cluster.capacity",
+    "summary": "Changes RDS cluster instance class, storage, or serverless capacity.",
+    "priority": 50,
+    "match": {
+      "bin": ["aws"],
+      "path": ["rds", "modify-db-cluster"],
+      "anyFlag": ["--db-cluster-instance-class", "--allocated-storage", "--serverless-v2-scaling-configuration"]
+    },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS cluster capacity",
+      "billing": "mixed",
+      "price": "unknown; depends on the new capacity configuration"
+    }
+  },
+  {
+    "id": "aws.ec2.purchase-reserved-instances-offering",
+    "version": "1",
+    "provider": "AWS",
+    "category": "prepaid-commitment",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.purchase-reserved-instances-offering",
+    "summary": "Purchases EC2 Reserved Instances, a prepaid commitment.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "purchase-reserved-instances-offering"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 Reserved Instances",
+      "billing": "one-time",
+      "price": "unknown; a prepaid commitment whose total depends on the offering and instance count"
+    },
+    "fixtures": ["aws-ec2-purchase-reserved"]
+  },
+  {
+    "id": "aws.rds.purchase-reserved-db-instances-offering",
+    "version": "1",
+    "provider": "AWS",
+    "category": "prepaid-commitment",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.rds.purchase-reserved-db-instances-offering",
+    "summary": "Purchases RDS Reserved Instances, a prepaid commitment.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["rds", "purchase-reserved-db-instances-offering"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "RDS Reserved Instances",
+      "billing": "one-time",
+      "price": "unknown; a prepaid commitment whose total depends on the offering and instance count"
+    }
+  },
+  {
+    "id": "aws.savingsplans.create-savings-plan",
+    "version": "1",
+    "provider": "AWS",
+    "category": "prepaid-commitment",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.savingsplans.create-savings-plan",
+    "summary": "Creates a Savings Plan, an hourly spend commitment for a fixed term.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["savingsplans", "create-savings-plan"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Savings Plan commitment",
+      "billing": "recurring",
+      "price": "unknown; an hourly spend commitment for a 1 or 3 year term"
+    }
+  },
+  {
+    "id": "aws.ec2.purchase-host-reservation",
+    "version": "1",
+    "provider": "AWS",
+    "category": "prepaid-commitment",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.purchase-host-reservation",
+    "summary": "Purchases an EC2 Dedicated Host reservation, a prepaid commitment.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "purchase-host-reservation"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 Dedicated Host reservation",
+      "billing": "one-time",
+      "price": "unknown; a prepaid commitment whose total depends on the offering"
+    }
+  },
+  {
+    "id": "aws.ec2.create-nat-gateway",
+    "version": "1",
+    "provider": "AWS",
+    "category": "network-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ec2.create-nat-gateway",
+    "summary": "Creates a NAT gateway, billed while provisioned and for processed data.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ec2", "create-nat-gateway"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EC2 NAT gateway",
+      "billing": "mixed",
+      "price": "unknown; hourly and data-processing charges vary by region and usage"
+    }
+  },
+  {
+    "id": "aws.eks.create-cluster",
+    "version": "1",
+    "provider": "AWS",
+    "category": "compute-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.eks.create-cluster",
+    "summary": "Creates an EKS cluster, which starts recurring control-plane billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["eks", "create-cluster"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "EKS cluster",
+      "billing": "mixed",
+      "price": "unknown; control-plane, worker capacity, storage, and networking determine the cost"
+    }
+  },
+  {
+    "id": "aws.ecs.run-task",
+    "version": "1",
+    "provider": "AWS",
+    "category": "compute-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.ecs.run-task",
+    "summary": "Runs an ECS task, which can start billed compute capacity.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["ecs", "run-task"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "ECS task",
+      "billing": "usage-based",
+      "price": "unknown; launch type, task size, runtime, storage, and networking determine the cost"
+    }
+  },
+  {
+    "id": "aws.elbv2.create-load-balancer",
+    "version": "1",
+    "provider": "AWS",
+    "category": "network-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.elbv2.create-load-balancer",
+    "summary": "Creates an Elastic Load Balancer, billed while provisioned and by usage.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["elbv2", "create-load-balancer"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Elastic Load Balancer",
+      "billing": "mixed",
+      "price": "unknown; hourly and capacity charges vary by load balancer type, region, and usage"
+    }
+  },
+  {
+    "id": "aws.lightsail.create-instances",
+    "version": "1",
+    "provider": "AWS",
+    "category": "compute-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.lightsail.create-instances",
+    "summary": "Creates Lightsail instances, which start recurring compute billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["lightsail", "create-instances"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Lightsail instance(s)",
+      "billing": "recurring",
+      "price": "unknown; bundle, instance count, region, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.opensearch.create-domain",
+    "version": "1",
+    "provider": "AWS",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.opensearch.create-domain",
+    "summary": "Creates an OpenSearch domain, which starts recurring compute and storage billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["opensearch", "create-domain"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "OpenSearch domain",
+      "billing": "mixed",
+      "price": "unknown; instance types, node count, storage, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.redshift.create-cluster",
+    "version": "1",
+    "provider": "AWS",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.redshift.create-cluster",
+    "summary": "Creates a Redshift cluster, which starts recurring compute and storage billing.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["redshift", "create-cluster"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "Redshift cluster",
+      "billing": "mixed",
+      "price": "unknown; node type, node count, storage, and runtime determine the cost"
+    }
+  },
+  {
+    "id": "aws.dynamodb.create-table",
+    "version": "1",
+    "provider": "AWS",
+    "category": "database-create",
+    "actionForm": "shell",
+    "decision": "approval-required",
+    "reasonCode": "aws.dynamodb.create-table",
+    "summary": "Creates a DynamoDB table whose capacity, storage, and requests can incur charges.",
+    "priority": 50,
+    "match": { "bin": ["aws"], "path": ["dynamodb", "create-table"] },
+    "approval": {
+      "provider": "AWS",
+      "resource": "DynamoDB table",
+      "billing": "usage-based",
+      "price": "unknown; billing mode, provisioned capacity, storage, requests, and features determine the cost"
+    }
+  }
+]

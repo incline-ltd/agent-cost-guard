@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "./node_modules/.bin/agent-cost-guard hook copilot --mode cloud --strict",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "name": "@ashishkaloge/agent-cost-guard",
+  "version": "0.1.0",
+  "description": "Local, deterministic policy gate that inspects proposed agent commands and tool calls for cost-bearing actions and returns allow, approval-required, or block.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashishkaloge/agent-cost-guard.git"
+  },
+  "homepage": "https://github.com/ashishkaloge/agent-cost-guard#readme",
+  "bugs": {
+    "url": "https://github.com/ashishkaloge/agent-cost-guard/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "agent-cost-guard": "dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "rules",
+    "docs",
+    "examples",
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "node scripts/smoke.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "cost",
+    "guardrail",
+    "agent",
+    "claude-code",
+    "codex",
+    "cursor",
+    "github-copilot",
+    "hooks",
+    "cli",
+    "policy"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.10"
+  }
+}
