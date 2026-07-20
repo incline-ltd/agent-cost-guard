@@ -53,6 +53,14 @@ describe('redaction', () => {
     expect(output).toContain('[REDACTED:SLACK_TOKEN]');
   });
 
+  it('redacts a Google-shaped key without storing a key-shaped fixture', () => {
+    const fakeGoogleApiKey = ['AIza', 'TESTONLY', '0'.repeat(27)].join('');
+    const output = redact(`https://example.googleapis.com?key=${fakeGoogleApiKey}`);
+
+    expect(output).not.toContain(fakeGoogleApiKey);
+    expect(output).toContain('[REDACTED:GOOGLE_API_KEY]');
+  });
+
   it('fully redacts quoted multiword flag values', () => {
     const inputs = [
       'deploy --password "alpha bravo charlie" --region us-east-1',

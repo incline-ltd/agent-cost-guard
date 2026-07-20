@@ -54,12 +54,6 @@
     "present": ["--api-key"]
   },
   {
-    "name": "google-api-key-in-url",
-    "input": "curl 'https://maps.googleapis.com/maps/api?key=AIzaSyD1234567890abcdefghijklmnopqrstuv'",
-    "absent": ["AIzaSyD1234567890abcdefghijklmnopqrstuv"],
-    "present": ["[REDACTED:GOOGLE_API_KEY]"]
-  },
-  {
     "name": "jwt-token",
     "input": "AUTH=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5NfakeSig",
     "absent": ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"],
