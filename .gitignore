@@ -7,3 +7,11 @@ coverage/
 .env.*
 !.env.example
 *.log
+
+# Local assistant state
+/.claude/
+/.codex/
+/.chatgpt/
+/.cursor/
+/CLAUDE.md
+/CHATGPT.md
