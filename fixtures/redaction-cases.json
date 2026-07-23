@@ -37,9 +37,9 @@
   },
   {
     "name": "url-userinfo-password",
-    "input": "git clone https://ashish:s3cr3t-fake@github.com/acme/repo.git",
+    "input": "git clone https://fixture-user:s3cr3t-fake@example.invalid/acme/repo.git",
     "absent": ["s3cr3t-fake"],
-    "present": ["ashish:[REDACTED]@"]
+    "present": ["fixture-user:[REDACTED]@"]
   },
   {
     "name": "slack-token-assignment",
