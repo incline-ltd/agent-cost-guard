@@ -339,6 +339,10 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing rules or public
 contracts. Security reports belong in GitHub private vulnerability reporting;
 see [SECURITY.md](SECURITY.md).
 
+## Related projects
+
+- [awesome-agent-instructions](https://github.com/incline-ltd/awesome-agent-instructions)
+
 ## License
 
 [MIT](LICENSE)
